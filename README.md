@@ -1,19 +1,6 @@
 ## Sobre o Projeto - Envio de Mensagens Personalizadas via WhatsApp (Supabase + Z-API)
 Desafio técnico do processo seletivo para Estágio em Desenvolvimento Python na b2bflow. Consiste em um script que lê contatos cadastrados em um banco Supabase (PostgreSQL) e envia, via Z-API, uma mensagem de WhatsApp personalizada com o nome de cada contato, marcando cada envio como concluído no próprio banco para evitar duplicidade em execuções futuras.
 
-## Decisões Técnicas
-- **Variáveis sensíveis isoladas em `.env`**: credenciais do Supabase e do Z-API nunca ficam hardcoded no código, e o arquivo é ignorado pelo Git (`.gitignore`)
-- **Controle de envio pelo próprio banco**: campo `enviado` na tabela `cadastro` evita reenviar mensagem pra quem já recebeu, mesmo que o script seja executado várias vezes
-- **Tratamento de erro por contato**: um `try/except` isolado no envio impede que a falha em um número (ex: instância desconectada) interrompa o envio pros demais
-- **Mensagem personalizada via f-string**: nome de cada contato inserido dinamicamente no template de mensagem exigido pelo desafio
-- **Limite de envios por execução**: uso de `.limit(3)` na query do Supabase, respeitando a regra de até 3 contatos por disparo
-
-## Tecnologias
-- Python 3.12
-- Supabase (PostgreSQL)
-- Z-API (WhatsApp)
-- requests
-- python-dotenv
 
 ## Funcionalidades
 - Leitura dos contatos pendentes de envio no Supabase
@@ -50,12 +37,3 @@ ZAPI_CLIENT_TOKEN=
 pip install -r requirements.txt
 python main.py
 ```
-
-## Objetivo do projeto
-Desenvolvido como desafio técnico de processo seletivo, aplicando conceitos de:
-- Integração com APIs externas (Z-API)
-- Banco de dados relacional com Supabase
-- Boas práticas com variáveis de ambiente e versionamento
-- Tratamento de erros e logging básico no terminal
-
-Também serve como parte do meu portfólio, demonstrando aplicação prática de integração de serviços externos com Python.

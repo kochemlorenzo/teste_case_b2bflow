@@ -19,15 +19,19 @@ contatos = (
  
 if not contatos:
     print("Nenhum contato pendente de envio.")
+    exit()
+try:
+    for contato in contatos:
+        mensagem = f"Olá, {contato['nome']} tudo bem com você?"
+        payload = {"phone": contato["telefone"], "message": mensagem}
  
-for contato in contatos:
-    mensagem = f"Olá, {contato['nome']} tudo bem com você?"
-    payload = {"phone": contato["telefone"], "message": mensagem}
- 
-    try:
-        resp = requests.post(ZAPI_URL, json=payload, headers=ZAPI_HEADERS, timeout=10)
-        resp.raise_for_status()
-        print(f"Enviado para {contato['nome']} ({contato['telefone']})")
-        supabase.table("cadastro").update({"enviado": True}).eq("id", contato["id"]).execute()
-    except requests.exceptions.RequestException as e:
-        print(f"Erro ao enviar para {contato['nome']}: {e}")
+        try:
+            resp = requests.post(ZAPI_URL, json=payload, headers=ZAPI_HEADERS, timeout=10)
+            resp.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            print(f"Erro ao enviar para {contato['nome']}: {e}")
+        else:
+            print(f"Enviado para {contato['nome']} ({contato['telefone']})")
+            supabase.table("cadastro").update({"enviado": True}).eq("id", contato["id"]).execute()
+except Exception as e:
+    print(f"Erro geral no processamento: {e}")
